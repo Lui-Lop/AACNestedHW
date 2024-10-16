@@ -92,6 +92,17 @@ public class AssociativeArray<K, V> {
     return str + "}";
   } // toString()
 
+  public String toStringSimple() {
+    String str = "";
+    for (int i = 0; i < this.size; i++) {
+      if (i == this.size - 1) {
+        str = str + this.pairs[i].key;
+      }
+      str = str + this.pairs[i].key + " ";
+    }
+    return str;
+  }
+
   // +----------------+----------------------------------------------
   // | Public Methods |
   // +----------------+
