@@ -47,6 +47,9 @@ public class AACCategory implements AACPage {
 	 */
 	public String[] getImageLocs() {
 		String[] imageLocs = new String[this.categ.size()];
+		if (this.categ.size() == 0) {
+			return imageLocs;
+		}
 		imageLocs = this.categ.toStringSimple().split(" ");
 		return imageLocs;
 	}
