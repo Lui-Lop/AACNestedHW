@@ -1,21 +1,29 @@
 import java.util.NoSuchElementException;
 
+import edu.grinnell.csc207.util.AssociativeArray;
+import edu.grinnell.csc207.util.KeyNotFoundException;
+import edu.grinnell.csc207.util.NullKeyException;
+
 /**
  * Represents the mappings for a single category of items that should
  * be displayed
  * 
- * @author Catie Baker & YOUR NAME HERE
+ * @author Catie Baker & Luis Lopez
  *
  */
 public class AACCategory implements AACPage {
 
 	
+	String name;
+	AssociativeArray <String, String> categ;
+
 	/**
 	 * Creates a new empty category with the given name
 	 * @param name the name of the category
 	 */
 	public AACCategory(String name) {
-
+		this.categ = new AssociativeArray<String, String>();
+		this.name = name;
 	}
 	
 	/**
@@ -24,7 +32,12 @@ public class AACCategory implements AACPage {
 	 * @param text the text that image should speak
 	 */
 	public void addItem(String imageLoc, String text) {
-
+		try {
+			this.categ.set(imageLoc, text);
+		}
+		catch (NullKeyException e) {
+			return;
+		}
 	}
 
 	/**
@@ -33,7 +46,9 @@ public class AACCategory implements AACPage {
 	 * it should return an empty array
 	 */
 	public String[] getImageLocs() {
-		return null;
+		String[] imageLocs = new String[this.categ.size()];
+		imageLocs = this.categ.toStringSimple().split(" ");
+		return imageLocs;
 	}
 
 	/**
@@ -41,7 +56,7 @@ public class AACCategory implements AACPage {
 	 * @return the name of the category
 	 */
 	public String getCategory() {
-		return "";
+		return this.name;
 	}
 
 	/**
@@ -52,7 +67,11 @@ public class AACCategory implements AACPage {
 	 * 		   category
 	 */
 	public String select(String imageLoc) {
-		return "";
+		try {
+			return this.categ.get(imageLoc);
+		} catch (KeyNotFoundException e) {
+			return "";
+		}
 	}
 
 	/**
@@ -61,6 +80,6 @@ public class AACCategory implements AACPage {
 	 * @return true if it is in the category, false otherwise
 	 */
 	public boolean hasImage(String imageLoc) {
-		return false;
+		return this.categ.hasKey(imageLoc);
 	}
 }
