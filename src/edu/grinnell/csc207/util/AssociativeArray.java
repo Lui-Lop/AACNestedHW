@@ -97,8 +97,9 @@ public class AssociativeArray<K, V> {
     for (int i = 0; i < this.size; i++) {
       if (i == this.size - 1) {
         str = str + this.pairs[i].key;
-      }
+      } else {
       str = str + this.pairs[i].key + " ";
+      }
     }
     return str;
   }
