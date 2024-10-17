@@ -1,6 +1,10 @@
 import java.util.NoSuchElementException;
 
 import edu.grinnell.csc207.util.AssociativeArray;
+import edu.grinnell.csc207.util.NullKeyException;
+import java.io.File;  // Import the File class
+import java.io.FileNotFoundException;  // Import this class to handle errors
+import java.util.Scanner; // Import the Scanner class to read text files
 
 /**
  * Creates a set of mappings of an AAC that has two levels,
@@ -19,7 +23,7 @@ public class AACMappings implements AACPage {
 	/*
 	 * Fields
 	 */
-	AACCategory current;
+	String current;
 	AssociativeArray<String, AACCategory> maps;
 
 	/**
@@ -41,9 +45,25 @@ public class AACMappings implements AACPage {
 	 * and food has french fries and watermelon and clothing has a 
 	 * collared shirt
 	 * @param filename the name of the file that stores the mapping information
+	 * @throws FileNotFoundException 
+	 * @throws NullKeyException 
 	 */
-	public AACMappings(String filename) {
+	public AACMappings(String filename) throws FileNotFoundException, NullKeyException {
+		this.current = filename;
 		this.maps = new AssociativeArray<String, AACCategory>();
+		File file = new File(filename);
+		Scanner scan = new Scanner(file);
+		while (scan.hasNextLine()) {
+			String currLine = scan.nextLine();
+			String[] splitUp = currLine.split(" ");
+			if (splitUp[0].charAt(0) == ('>')) {
+				String unArrow = splitUp[0].replace(">", "");
+
+			} else {
+				AACCategory cat = new AACCategory("");
+				this.maps.set("", cat);
+			}
+		}
 	}
 	
 	/**
@@ -74,7 +94,7 @@ public class AACMappings implements AACPage {
 	 * it should return an empty array
 	 */
 	public String[] getImageLocs() {
-		return this.current.getImageLocs();
+		return this.maps
 	}
 	
 	/**
