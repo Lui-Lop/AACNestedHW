@@ -1,3 +1,6 @@
+import java.util.NoSuchElementException;
+
+import edu.grinnell.csc207.util.AssociativeArray;
 
 /**
  * Creates a set of mappings of an AAC that has two levels,
@@ -12,6 +15,13 @@
  */
 public class AACMappings implements AACPage {
 	
+
+	/*
+	 * Fields
+	 */
+	AACCategory current;
+	AssociativeArray<String, AACCategory> maps;
+
 	/**
 	 * Creates a set of mappings for the AAC based on the provided
 	 * file. The file is read in to create categories and fill each
@@ -33,7 +43,7 @@ public class AACMappings implements AACPage {
 	 * @param filename the name of the file that stores the mapping information
 	 */
 	public AACMappings(String filename) {
-
+		this.maps = new AssociativeArray<String, AACCategory>();
 	}
 	
 	/**
@@ -50,8 +60,12 @@ public class AACMappings implements AACPage {
 	 * @throws NoSuchElementException if the image provided is not in the current 
 	 * category
 	 */
-	public String select(String imageLoc) {
-		return null;
+	public String select(String imageLoc) throws NoSuchElementException{
+		if (hasImage(imageLoc)) {
+			return getCategory();
+		} else {
+			throw new NoSuchElementException();
+		}
 	}
 	
 	/**
@@ -60,7 +74,7 @@ public class AACMappings implements AACPage {
 	 * it should return an empty array
 	 */
 	public String[] getImageLocs() {
-		return null;
+		return this.current.getImageLocs();
 	}
 	
 	/**
@@ -68,7 +82,8 @@ public class AACMappings implements AACPage {
 	 * category
 	 */
 	public void reset() {
-
+		this.current = null;
+		return;
 	}
 	
 	
@@ -103,7 +118,7 @@ public class AACMappings implements AACPage {
 	 * @param text the text associated with the image
 	 */
 	public void addItem(String imageLoc, String text) {
-		
+		this.current.addItem(imageLoc, text);
 	}
 
 
@@ -113,7 +128,7 @@ public class AACMappings implements AACPage {
 	 * on the default category
 	 */
 	public String getCategory() {
-		return null;
+		return this.current.name;
 	}
 
 
@@ -125,6 +140,6 @@ public class AACMappings implements AACPage {
 	 * can be displayed, false otherwise
 	 */
 	public boolean hasImage(String imageLoc) {
-		return false;
+		return this.current.hasImage(imageLoc);
 	}
 }

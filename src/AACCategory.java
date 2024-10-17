@@ -14,6 +14,9 @@ import edu.grinnell.csc207.util.NullKeyException;
 public class AACCategory implements AACPage {
 
 	
+	/*
+	 * Fields
+	 */
 	String name;
 	AssociativeArray <String, String> categ;
 
@@ -69,11 +72,15 @@ public class AACCategory implements AACPage {
 	 * @throws NoSuchElementException if the image provided is not in the current
 	 * 		   category
 	 */
-	public String select(String imageLoc) {
-		try {
-			return this.categ.get(imageLoc);
-		} catch (KeyNotFoundException e) {
-			return "";
+	public String select(String imageLoc) throws NoSuchElementException {
+		if (this.categ.hasKey(imageLoc)) {
+			try {
+				return this.categ.get(imageLoc);
+			} catch (KeyNotFoundException e) {
+				throw new NoSuchElementException();
+			}
+		} else {
+			throw new NoSuchElementException();
 		}
 	}
 
