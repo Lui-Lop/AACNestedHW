@@ -66,6 +66,7 @@ public class AACMappings implements AACPage {
 		this.maps = new AssociativeArray<String, AACCategory>();
 		File file = new File(filename);
 		Scanner scan = new Scanner(file);
+		this.current = new AACCategory("");
 
 		while (scan.hasNextLine()) {
 			String currLine = scan.nextLine();
