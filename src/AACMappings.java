@@ -1,9 +1,12 @@
 import java.util.NoSuchElementException;
 
 import edu.grinnell.csc207.util.AssociativeArray;
+import edu.grinnell.csc207.util.KeyNotFoundException;
 import edu.grinnell.csc207.util.NullKeyException;
 import java.io.File;  // Import the File class
 import java.io.FileNotFoundException;  // Import this class to handle errors
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner; // Import the Scanner class to read text files
 
 /**
@@ -23,7 +26,19 @@ public class AACMappings implements AACPage {
 	/*
 	 * Fields
 	 */
-	String current;
+
+	 /**
+	  * current working category
+	  */
+	AACCategory current;
+
+	/**
+	 * home category to keep track of it
+	 */
+	AACCategory home;
+	/**
+	 * associate array that keeps track of all categories and image locations associate with them
+	 */
 	AssociativeArray<String, AACCategory> maps;
 
 	/**
@@ -46,24 +61,50 @@ public class AACMappings implements AACPage {
 	 * collared shirt
 	 * @param filename the name of the file that stores the mapping information
 	 * @throws FileNotFoundException 
-	 * @throws NullKeyException 
 	 */
-	public AACMappings(String filename) throws FileNotFoundException, NullKeyException {
-		this.current = filename;
+	public AACMappings(String filename) throws FileNotFoundException{
 		this.maps = new AssociativeArray<String, AACCategory>();
 		File file = new File(filename);
 		Scanner scan = new Scanner(file);
+
 		while (scan.hasNextLine()) {
 			String currLine = scan.nextLine();
-			String[] splitUp = currLine.split(" ");
-			if (splitUp[0].charAt(0) == ('>')) {
+			String[] splitUp = currLine.split("\\s");
+			String categ = splitUp[0];
+
+
+
+			if (categ.length() <= 0) {
+				System.err.println("File Is Empty");
+				scan.close();
+				return;
+			}
+
+			if (categ.charAt(0) == ('>')) {
 				String unArrow = splitUp[0].replace(">", "");
+				this.current.addItem(unArrow, splitUp[1]);
 
 			} else {
-				AACCategory cat = new AACCategory("");
-				this.maps.set("", cat);
+				if (this.maps.hasKey(categ)) {
+					try {
+						this.current = this.maps.get(categ);
+					} catch (KeyNotFoundException e) {
+
+					}
+
+
+				} else {
+					AACCategory newCat = new AACCategory(splitUp[1]);
+					try {
+						this.maps.set(categ, newCat);
+					} catch (NullKeyException e) {
+
+					}
+					this.current = newCat;
+				}
 			}
 		}
+		scan.close();
 	}
 	
 	/**
@@ -81,8 +122,16 @@ public class AACMappings implements AACPage {
 	 * category
 	 */
 	public String select(String imageLoc) throws NoSuchElementException{
-		if (hasImage(imageLoc)) {
-			return getCategory();
+		if (this.maps.hasKey(imageLoc)) {
+			try {
+				this.current = this.maps.get(imageLoc);
+				return "";
+			} catch (KeyNotFoundException e) {
+				return "";
+				// should not throw exception
+			}
+		} else if (this.current.hasImage(imageLoc)) {
+			return this.current.select(imageLoc);
 		} else {
 			throw new NoSuchElementException();
 		}
@@ -94,7 +143,12 @@ public class AACMappings implements AACPage {
 	 * it should return an empty array
 	 */
 	public String[] getImageLocs() {
-		return this.maps
+		String[] str = new String[0];
+		if (this.current.getImageLocs().length == 0) {
+			return str;
+		} else {
+			return this.current.getImageLocs();
+		}
 	}
 	
 	/**
@@ -102,7 +156,7 @@ public class AACMappings implements AACPage {
 	 * category
 	 */
 	public void reset() {
-		this.current = null;
+		this.current = this.home;
 		return;
 	}
 	
@@ -126,9 +180,16 @@ public class AACMappings implements AACPage {
 	 * 
 	 * @param filename the name of the file to write the
 	 * AAC mapping to
+	 * @throws IOException 
 	 */
-	public void writeToFile(String filename) {
-		
+	public void writeToFile(String filename) throws IOException {
+		this.maps = new AssociativeArray<String, AACCategory>();
+		FileWriter wrtr = new FileWriter(filename);
+		String[] cat = this.current.getImageLocs();
+		for (int i = 0; i < cat.length; i++) {
+			wrtr.write(cat[i]);
+		}
+		wrtr.close();
 	}
 	
 	/**

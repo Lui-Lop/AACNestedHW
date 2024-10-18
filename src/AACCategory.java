@@ -17,7 +17,15 @@ public class AACCategory implements AACPage {
 	/*
 	 * Fields
 	 */
+
+	 /**
+	  * name of category
+	  */
 	String name;
+
+	/*
+	 * array that stores image location and text associated
+	 */
 	AssociativeArray <String, String> categ;
 
 	/**
