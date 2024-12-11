@@ -83,7 +83,11 @@ public class AACMappings implements AACPage {
 
 			if (categ.charAt(0) == ('>')) {
 				String unArrow = splitUp[0].replace(">", "");
-				this.current.addItem(unArrow, splitUp[1]);
+				String text = splitUp[1];
+				for (int i = 2; i < splitUp.length; i++ ) {
+					text = text + " " + splitUp[i];
+				}
+				this.current.addItem(unArrow, text);
 
 			} else {
 				if (this.maps.hasKey(categ)) {
@@ -95,7 +99,11 @@ public class AACMappings implements AACPage {
 
 
 				} else {
-					AACCategory newCat = new AACCategory(splitUp[1]);
+					String text = splitUp[1];
+					for (int i = 2; i < splitUp.length; i++ ) {
+						text = text + " " + splitUp[i];
+					}
+					AACCategory newCat = new AACCategory(text);
 					try {
 						this.maps.set(categ, newCat);
 					} catch (NullKeyException e) {
