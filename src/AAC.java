@@ -15,7 +15,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -47,8 +48,9 @@ public class AAC implements ActionListener {
 	 * 
 	 * @param filename the name of the file that contains the images and text that
 	 *                 will be in the AAC
+	 * @throws FileNotFoundException 
 	 */
-	public AAC(String filename) {
+	public AAC(String filename) throws FileNotFoundException {
 		// this.page = new AACCategory("test");
 		this.page = new AACMappings(filename);
 		this.images = this.page.getImageLocs();
@@ -148,7 +150,7 @@ public class AAC implements ActionListener {
 		pane.requestFocusInWindow();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
 
 		try {
 			// Set property as Kevin Dictionary
@@ -184,7 +186,12 @@ public class AAC implements ActionListener {
 			this.startIndex += NUM_ACROSS * NUM_DOWN;
 			this.endIndex = Math.min(endIndex + NUM_ACROSS * NUM_DOWN, this.images.length);
 		} else if (actionCommand.equals("save") && this.page instanceof AACMappings) {
-			((AACMappings) this.page).writeToFile("AACMappingsNew.txt");
+			try {
+				((AACMappings) this.page).writeToFile("AACMappingsNew.txt");
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			this.images = this.page.getImageLocs();
 			this.startIndex = 0;
 			this.endIndex = Math.min(NUM_ACROSS * NUM_DOWN, this.images.length);

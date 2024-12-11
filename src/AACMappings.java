@@ -17,7 +17,7 @@ import java.util.Scanner; // Import the Scanner class to read text files
  * and updating the set of images that would be shown and handling
  * an interactions.
  * 
- * @author Catie Baker & YOUR NAME HERE
+ * @author Catie Baker & Luis Lopez
  *
  */
 public class AACMappings implements AACPage {
