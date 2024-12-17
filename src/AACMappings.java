@@ -104,6 +104,7 @@ public class AACMappings implements AACPage {
 						text = text + " " + splitUp[i];
 					}
 					AACCategory newCat = new AACCategory(text);
+					this.current.addItem(categ, text);
 					try {
 						this.maps.set(categ, newCat);
 					} catch (NullKeyException e) {
