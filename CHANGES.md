@@ -1,0 +1,1 @@
+Made changes to AACMappings to get screen to pop out when running, by changing some string parsing issues and constructor.
